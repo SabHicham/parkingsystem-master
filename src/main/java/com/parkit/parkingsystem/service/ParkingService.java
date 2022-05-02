@@ -8,6 +8,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sun.util.calendar.LocalGregorianCalendar;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -31,13 +32,20 @@ public class ParkingService {
     public void processIncomingVehicle() {
         try{
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
-            if(parkingSpot !=null && parkingSpot.getId() > 0){
+            if(parkingSpot !=null && parkingSpot.getId() > 0) {
                 String vehicleRegNumber = getVehichleRegNumber();
-
                 //Verifier si la voiture est déjà dans le parking
+               //Ticket ticketDB   = ticketDAO.getTicket(vehicleRegNumber);
+
+              /*if ((ticketDB.getVehicleRegNumber().equals(vehicleRegNumber )) &&
+                      ( ticketDB.getOutTime()== null)){*/
+                if(ticketDAO.isCarInside(vehicleRegNumber))
+                    {
+                  System.out.println(" la plaque existe déja dans le parcking  : " +vehicleRegNumber);
+              return;
+              } else   {
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
-
                 LocalDateTime inTime = LocalDateTime.now();
                 Ticket ticket = new Ticket();
                 //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
@@ -52,13 +60,15 @@ public class ParkingService {
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
                 System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
              //ticketDAO.getTicket(vehicleRegNumber);
-             return;
+                }
 
             }
         }catch(Exception e){
             logger.error("Unable to process incoming vehicle",e);
         }
     }
+
+
 
     private String getVehichleRegNumber() throws Exception {
         System.out.println("Please type the vehicle registration number and press enter key");
@@ -102,11 +112,19 @@ public class ParkingService {
             }
         }
     }
+    //youssfi Mohammed
 
     public void processExitingVehicle() {
         try{
             String vehicleRegNumber = getVehichleRegNumber();
-            Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
+            boolean isCarInside = ticketDAO.isCarInside(vehicleRegNumber);
+
+            if ((!isCarInside)){
+                System.out.println(" la plaque est déja partis, impossile de resaisir une sortie : " +ticket.getVehicleRegNumber());
+                return;
+
+            } else   {
+
             LocalDateTime outTime = LocalDateTime.now();
             ticket.setOutTime(outTime);
             fareCalculatorService.calculateFare(ticket);
@@ -118,9 +136,9 @@ public class ParkingService {
                 System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
             }else{
                 System.out.println("Unable to update ticket information. Error occurred");
-            }
-        }catch(Exception e){
-            logger.error("Unable to process exiting vehicle",e);
+            }}
+        }catch(Exception exep){
+            logger.error("Unable to process exiting vehicle",exep);
         }
     }
 }

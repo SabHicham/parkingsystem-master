@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public class InteractiveShell {
 
+
     private static final Logger logger = LogManager.getLogger("InteractiveShell");
 
     public static void loadInterface(){
