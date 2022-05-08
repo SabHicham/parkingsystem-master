@@ -115,7 +115,6 @@ public class ParkingService {
             }
         }
     }
-    //youssfi Mohammed
 
     public void processExitingVehicle() {
         try{
