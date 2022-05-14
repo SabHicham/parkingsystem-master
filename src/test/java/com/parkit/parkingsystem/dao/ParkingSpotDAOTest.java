@@ -5,6 +5,7 @@ import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -42,9 +43,9 @@ public class ParkingSpotDAOTest {
 
 
 
-    @BeforeAll
-    private static void setUp(){
-        parkingSpotDAO=new ParkingSpotDAO();
+    @BeforeEach
+    private void setUp(){
+        parkingSpotDAO=new ParkingSpotDAO(dataBaseConfig);
 
     }
 
