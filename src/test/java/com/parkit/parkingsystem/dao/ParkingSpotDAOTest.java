@@ -40,13 +40,9 @@ public class ParkingSpotDAOTest {
     @Mock
     private static ResultSet rs;
 
-
-
-
     @BeforeEach
     private void setUp(){
         parkingSpotDAO=new ParkingSpotDAO(dataBaseConfig);
-
     }
 
     @Test
