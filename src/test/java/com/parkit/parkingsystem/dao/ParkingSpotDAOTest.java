@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.dao;
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
+import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.model.ParkingSpot;
@@ -16,7 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -40,6 +41,7 @@ public class ParkingSpotDAOTest {
     @Mock
     private static ResultSet rs;
 
+
     @BeforeEach
     private void setUp(){
         parkingSpotDAO=new ParkingSpotDAO(dataBaseConfig);
@@ -58,5 +60,39 @@ public class ParkingSpotDAOTest {
         //THEN
         assertNotEquals(0,resolve);
     }
+    @Test
+    public void updateParkingTest() throws SQLException, ClassNotFoundException {
+        //GIVEN
+        when(dataBaseConfig.getConnection()).thenReturn(con);
+        when(con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT)).thenReturn(ps);
+       when(ps.executeUpdate()).thenReturn(1);
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+
+
+        //WHEN
+        boolean resolve=parkingSpotDAO.updateParking(parkingSpot);
+
+        //THEN
+        assertTrue(resolve);
+    }
+    @Test
+    public void updateParkingTest2() throws SQLException, ClassNotFoundException {
+        //GIVEN
+        when(dataBaseConfig.getConnection()).thenReturn(con);
+        when(con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT)).thenReturn(ps);
+        when(ps.executeUpdate()).thenReturn(10);
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+
+
+        //WHEN
+        boolean resolve=parkingSpotDAO.updateParking(parkingSpot);
+
+        //THEN
+        assertFalse(resolve);
+    }
+
+
 }
+
+
 
