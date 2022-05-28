@@ -2,24 +2,64 @@ package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.model.ParkingSpot;
+import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class InteractiveShell {
 
-
     private static final Logger logger = LogManager.getLogger("InteractiveShell");
 
-    public static void loadInterface(){
+    private static InteractiveShell instance = null;
+    private InputReaderUtil inputReaderUtil;
+    private ParkingSpotDAO parkingSpotDAO;
+    private TicketDAO ticketDAO;
+
+    public ParkingService getParkingService() {
+        return parkingService;
+    }
+
+    private ParkingService parkingService;
+
+    public InteractiveShell(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO, ParkingService parkingService) {
+        this.inputReaderUtil = inputReaderUtil;
+        this.parkingSpotDAO = parkingSpotDAO;
+        this.ticketDAO = ticketDAO;
+        this.parkingService = parkingService;
+        if (parkingService == null){
+            this.parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        } else {
+            this.parkingService = parkingService;
+        }
+
+    }
+
+    public InteractiveShell() {
+        this(new InputReaderUtil(), new ParkingSpotDAO(), new TicketDAO(), null);
+    }
+
+    public static InteractiveShell getInstance(){
+        if (instance == null) {
+            instance = new InteractiveShell();
+        }
+        return instance;
+    }
+
+    public static InteractiveShell getInstance(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO, ParkingService parkingService){
+        if (instance == null) {
+            instance = new InteractiveShell(inputReaderUtil, parkingSpotDAO, ticketDAO, parkingService);
+        }
+        return instance;
+    }
+
+    public void loadInterface(){
         logger.info("App initialized!!!");
         System.out.println("Welcome to Parking System!");
 
         boolean continueApp = true;
-        InputReaderUtil inputReaderUtil = new InputReaderUtil();
-        ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
-        TicketDAO ticketDAO = new TicketDAO();
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
 
         while(continueApp){
             loadMenu();

@@ -7,7 +7,6 @@ import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
-import junit.framework.Assert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,25 +52,34 @@ public class ParkingDataBaseIT {
 
     @Test
     public void testParkingACar()throws Exception{
+        //Given
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+        //When
         parkingService.processIncomingVehicle();
+        //then
+
         //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
-        String Matricule = inputReaderUtil.readVehicleRegistrationNumber();
-        Ticket ticket = ticketDAO.getTicket(Matricule);
+        Ticket ticket = ticketDAO.getTicket("ABCDEF");
         assertNotNull(ticket);
         assertEquals(false, ticket.getParkingSpot().isAvailable());
     }
 
     @Test
     public void testParkingLotExit()throws Exception{
-        testParkingACar();
+        //testParkingACaur()
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processIncomingVehicle();
         parkingService.processExitingVehicle();
         //TODO: check that the fare generated and out time are populated correctly in the database
         String Matricule = inputReaderUtil.readVehicleRegistrationNumber();
         Ticket ticket = ticketDAO.getTicket(Matricule);
+        System.out.println(ticket.toString());
         assertNotNull(ticket.getOutTime());
-        assertNotEquals(0,ticket.getPrice());
+        assertEquals(0,ticket.getPrice());
     }
+
+
+
 
 }
