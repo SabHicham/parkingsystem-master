@@ -71,4 +71,16 @@ public class Ticket {
     public void setOutTime(LocalDateTime outTime) {
         this.outTime = outTime;
     }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "id=" + id +
+                ", parkingSpot=" + parkingSpot +
+                ", vehicleRegNumber='" + vehicleRegNumber + '\'' +
+                ", price=" + price +
+                ", inTime=" + inTime +
+                ", outTime=" + outTime +
+                '}';
+    }
 }

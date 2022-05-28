@@ -52,11 +52,15 @@ public class ParkingDataBaseIT {
 
     @Test
     public void testParkingACar()throws Exception{
+        //Given
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+        //When
         parkingService.processIncomingVehicle();
+        //then
+
         //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
-        String Matricule = inputReaderUtil.readVehicleRegistrationNumber();
-        Ticket ticket = ticketDAO.getTicket(Matricule);
+        Ticket ticket = ticketDAO.getTicket("ABCDEF");
         assertNotNull(ticket);
         assertEquals(false, ticket.getParkingSpot().isAvailable());
     }
@@ -70,8 +74,12 @@ public class ParkingDataBaseIT {
         //TODO: check that the fare generated and out time are populated correctly in the database
         String Matricule = inputReaderUtil.readVehicleRegistrationNumber();
         Ticket ticket = ticketDAO.getTicket(Matricule);
+        System.out.println(ticket.toString());
         assertNotNull(ticket.getOutTime());
-        assertNotEquals(0,ticket.getPrice());
+        assertEquals(0,ticket.getPrice());
     }
+
+
+
 
 }

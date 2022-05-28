@@ -22,9 +22,10 @@ public class TicketDAO {
 
     public boolean saveTicket(Ticket ticket) {
         Connection con = null;
+        PreparedStatement ps = null;
         try {
             con = dataBaseConfig.getConnection();
-            PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TICKET);
+            ps = con.prepareStatement(DBConstants.SAVE_TICKET);
             //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             //ps.setInt(1,ticket.getId());
             ps.setInt(1, ticket.getParkingSpot().getId());
@@ -37,6 +38,7 @@ public class TicketDAO {
             logger.error("Error fetching next available slot", ex);
         } finally {
             dataBaseConfig.closeConnection(con);
+            dataBaseConfig.closePreparedStatement(ps);
             //return false;
         }
         return false;
@@ -112,6 +114,7 @@ public class TicketDAO {
     public boolean isCarClient(String vehicleRegNumber) {
         Connection con = null;
         try {
+            System.out.println("Reg Number =====> "+vehicleRegNumber);
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.IS_CAR_CLIENT);
             ps.setString(1, vehicleRegNumber);
@@ -129,6 +132,10 @@ public class TicketDAO {
         return false;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "TicketDAO{" +
+                "dataBaseConfig=" + dataBaseConfig +
+                '}';
+    }
 }

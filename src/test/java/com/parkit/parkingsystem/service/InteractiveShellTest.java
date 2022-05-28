@@ -62,4 +62,14 @@ class InteractiveShellTest {
         //THEN
         verify(parkingService, Mockito.times(2)).processExitingVehicle();
     }
+    @Test
+    void loadInterface4() {
+        //GIVEN
+
+        //WHEN
+        interactiveShell = new InteractiveShell(inputReaderUtil, parkingSpotDAO, ticketDAO, null);
+
+        //THEN
+        assertNotNull(interactiveShell.getParkingService());
+    }
 }

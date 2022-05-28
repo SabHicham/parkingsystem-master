@@ -16,6 +16,11 @@ public class InteractiveShell {
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
     private TicketDAO ticketDAO;
+
+    public ParkingService getParkingService() {
+        return parkingService;
+    }
+
     private ParkingService parkingService;
 
     public InteractiveShell(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO, ParkingService parkingService) {
