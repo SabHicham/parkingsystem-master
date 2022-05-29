@@ -10,8 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import sun.security.krb5.internal.PAData;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -32,4 +31,22 @@ public class ParkingSpotTest {
 
 
     }
+
+    @Test
+    public void setIdTest(){
+        ParkingSpot parkingSpot = new ParkingSpot(0, ParkingType.CAR, true);
+        parkingSpot.setId(40);
+        assertEquals(40, parkingSpot.getId());
+
+    }
+
+    @Test
+    public void setParkingType(){
+        ParkingSpot parkingSpot = new ParkingSpot(0, ParkingType.CAR, true);
+        parkingSpot.setParkingType(ParkingType.BIKE);
+        assertEquals(ParkingType.BIKE, parkingSpot.getParkingType());
+
+
+    }
+
 }
