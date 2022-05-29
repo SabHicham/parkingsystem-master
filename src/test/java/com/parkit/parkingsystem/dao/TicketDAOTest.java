@@ -16,10 +16,7 @@ import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -163,6 +160,8 @@ public class TicketDAOTest {
         assertTrue(value);
     }
 
+
+
     // TODO: Try to raise an error to validate catch case...
 
     @Test
@@ -177,6 +176,27 @@ public class TicketDAOTest {
         boolean value = ticketDAO.isCarClient(ticket.getVehicleRegNumber());
         //THEN
         assertFalse(value);
+    }
+
+    @Test
+    public void getTicketTestt() throws SQLException, ClassNotFoundException {
+        LocalDateTime timeinExpected = LocalDateTime.now().minusDays(1);
+        LocalDateTime timeOutExpect = LocalDateTime.now();
+        //GIVEN
+        when(dataBaseTestConfig.getConnection()).thenReturn(con);
+        when(con.prepareStatement(any())).thenReturn(ps);
+        when(ps.executeQuery()).thenReturn(rs);
+        when(rs.next()).thenReturn(true);
+        when(rs.getTimestamp(5)).thenReturn(Timestamp.valueOf(timeinExpected));
+        when(rs.getTimestamp(4)).thenReturn(Timestamp.valueOf(timeOutExpect));
+        when(rs.getInt(1)).thenReturn(0);
+        when(rs.getString(6)).thenReturn("CAR");
+
+        //WHEN
+        Ticket ticket = ticketDAO.getTicket("AZERTY");
+
+        //THEN
+        assertNotNull(ticket);
     }
 
     /*@Test
