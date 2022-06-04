@@ -61,6 +61,7 @@ public class ParkingServiceTest {
 
     @Test
     public void processExitingVehicleTest(){
+        //GIVEN
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
         Ticket ticket = new Ticket();
         ticket.setInTime(LocalDateTime.now().minusHours(1));
@@ -69,7 +70,9 @@ public class ParkingServiceTest {
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
         when(ticketDAO.isCarInside("ABCDEF")).thenReturn(true);
         when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
+        //WHEN
         parkingService.processExitingVehicle();
+        //THEN
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     }
 
