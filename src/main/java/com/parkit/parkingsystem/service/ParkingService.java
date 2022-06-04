@@ -42,7 +42,7 @@ public class ParkingService {
                       ( ticketDB.getOutTime()== null)){*/
                 if(ticketDAO.isCarInside(vehicleRegNumber))
                 {
-                    System.out.println(" la plaque existe déja dans le parcking  : " +vehicleRegNumber);
+                    System.out.println(" la plaque existe déja dans le parking  : " +vehicleRegNumber);
                     return;
                 } else   {
                     parkingSpot.setAvailable(false);
@@ -137,8 +137,11 @@ public class ParkingService {
                     ParkingSpot parkingSpot = ticket.getParkingSpot();
                     parkingSpot.setAvailable(true);
                     parkingSpotDAO.updateParking(parkingSpot);
-                    System.out.println("Please pay the parking fare:" + ticket.getPrice());
-                    System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
+                        System.out.println("Please pay the parking fare:" + ticket.getPrice());
+                        System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
+                    if (ticketDAO.isCarClient(vehicleRegNumber)) {
+                        System.out.println("Bienvenue! En tant qu'utilisateur récurrent de notre parking, vous bénéficierez d'une réduction de 5%.");
+                    }
                 }else{
                     System.out.println("Unable to update ticket information. Error occurred");
                 }}
