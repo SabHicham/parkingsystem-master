@@ -48,6 +48,14 @@ public class ParkingSpotDAOTest {
     }
 
     @Test
+    public void constructorWithNoParams() {
+        final ParkingSpotDAO subjet = new ParkingSpotDAO();
+
+        assertNotNull(subjet.dataBaseConfig);
+    }
+
+
+    @Test
     public void getNextAvailableSlotTest() throws SQLException, ClassNotFoundException {
         //GIVEN
         when(dataBaseConfig.getConnection()).thenReturn(con);
@@ -74,6 +82,21 @@ public class ParkingSpotDAOTest {
 
         //THEN
         assertTrue(resolve);
+    }
+
+    @Test
+    public void updateParkingReturnFalseTest() throws SQLException, ClassNotFoundException {
+        //GIVEN
+        when(dataBaseConfig.getConnection()).thenReturn(con);
+        when(con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT)).thenThrow(SQLException.class);
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+
+
+        //WHEN
+        boolean resolve=parkingSpotDAO.updateParking(parkingSpot);
+
+        //THEN
+        assertFalse(resolve);
     }
     @Test
     public void updateParkingTest2() throws SQLException, ClassNotFoundException {
