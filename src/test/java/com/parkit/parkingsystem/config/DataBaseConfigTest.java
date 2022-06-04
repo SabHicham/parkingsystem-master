@@ -27,12 +27,28 @@ class DataBaseConfigTest {
     private static ResultSet resultSet;
 
     @Test
+    void getConnection() throws SQLException, ClassNotFoundException {
+
+        DataBaseConfig dataBaseConfig = new DataBaseConfig();
+        Connection subjet = dataBaseConfig.getConnection();
+        assertNotNull(subjet);
+    }
+
+    @Test
     void closeConnection() throws SQLException {
 
         DataBaseConfig dataBaseConfig = new DataBaseConfig();
         dataBaseConfig.closeConnection(connection);
         verify(connection, Mockito.times(1)).close();
 
+    }
+
+    @Test
+    void closeConnectionNull() throws SQLException {
+
+        DataBaseConfig dataBaseConfig = new DataBaseConfig();
+        dataBaseConfig.closeConnection(null);
+        verify(connection, Mockito.times(0)).close();
     }
 
     @Test
@@ -43,10 +59,24 @@ class DataBaseConfigTest {
     }
 
     @Test
+    void closePreparedStatementNull() throws SQLException {
+        DataBaseConfig dataBaseConfig = new DataBaseConfig();
+        dataBaseConfig.closePreparedStatement(null);
+        verify(preparedStatement, Mockito.times(0)).close();
+    }
+
+    @Test
     void closeResultSet() throws SQLException {
         DataBaseConfig dataBaseConfig = new DataBaseConfig();
         dataBaseConfig.closeResultSet(resultSet);
         verify(resultSet, Mockito.times(1)).close();
+    }
+
+    @Test
+    void closeResultSetNull() throws SQLException {
+        DataBaseConfig dataBaseConfig = new DataBaseConfig();
+        dataBaseConfig.closeResultSet(null);
+        verify(resultSet, Mockito.times(0)).close();
     }
 
 }

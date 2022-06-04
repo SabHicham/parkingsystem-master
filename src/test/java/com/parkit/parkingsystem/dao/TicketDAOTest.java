@@ -68,6 +68,20 @@ public class TicketDAOTest {
     }
 
     @Test
+    public void saveTicketReturnFalseTest() throws SQLException, ClassNotFoundException {
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+        Ticket ticket = new Ticket();
+
+        ticket.setInTime(LocalDateTime.now().minusHours(1));
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setVehicleRegNumber("ABCDEF");
+
+        when(dataBaseTestConfig.getConnection()).thenReturn(con);
+        when(con.prepareStatement(any())).thenThrow(SQLException.class);
+        assertFalse(ticketDAO.saveTicket(ticket));
+    }
+
+    @Test
     public void getTicketTest() {
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
         assertNull(ticket);
@@ -197,6 +211,14 @@ public class TicketDAOTest {
 
         //THEN
         assertNotNull(ticket);
+    }
+
+    @Test
+    public void toStringTest(){
+
+        when(dataBaseTestConfig.toString()).thenReturn("dataBaseConfig");
+
+        assertEquals("TicketDAO{dataBaseConfig=dataBaseConfig}", ticketDAO.toString());
     }
 
     /*@Test
